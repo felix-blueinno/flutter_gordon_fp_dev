@@ -16,7 +16,8 @@ Find the model and labels in the assets folder.
 
 1. Run `flutter pub get` to install tflite_flutter, tflite_flutter_helper and camera packages.
 
-2. Follow <a href="https://pub.dev/packages/tflite_flutter#important-initial-setup--add-dynamic-libraries-to-your-app">initial setup guideline</a> to prepare tflite for Android/iOS.
+2. Run `sh install.sh` (Linux/Mac) or `install.bat` (Windows),
+   <a href="https://pub.dev/packages/tflite_flutter#important-initial-setup--add-dynamic-libraries-to-your-app">reference</a>
 
 3. Follow <a href="https://pub.dev/packages/camera#installation">initial setup guideline</a> to prepare camera permission on Android/iOS.
 
