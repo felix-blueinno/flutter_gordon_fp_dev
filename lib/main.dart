@@ -32,6 +32,7 @@ class _CameraAppState extends State<CameraApp> {
 
   bool predicting = false;
   var result = '';
+  int cameraIndex = 0;
 
   @override
   void initState() {
@@ -40,7 +41,7 @@ class _CameraAppState extends State<CameraApp> {
   }
 
   void initCamera() {
-    controller = CameraController(cameras[1], ResolutionPreset.max);
+    controller = CameraController(cameras[cameraIndex], ResolutionPreset.max);
     controller.initialize().then((_) {
       if (!mounted) return;
 
@@ -60,7 +61,21 @@ class _CameraAppState extends State<CameraApp> {
     return !controller.value.isInitialized
         ? Container() // camera not yet ready
         : MaterialApp(
+            debugShowCheckedModeBanner: false,
             home: Scaffold(
+              appBar: AppBar(
+                title: Text("Gordon's mask detector"),
+                actions: [
+                  IconButton(
+                      onPressed: () {
+                        cameraIndex < cameras.length - 1
+                            ? cameraIndex++
+                            : cameraIndex = 0;
+                        initCamera();
+                      },
+                      icon: Icon(Icons.cameraswitch)),
+                ],
+              ),
               body: Stack(
                 children: [
                   Center(child: CameraPreview(controller)),
@@ -118,8 +133,6 @@ void convertYUV420ToImage(List<Object> args) {
   final int? uvPixelStride = cameraImage.planes[1].bytesPerPixel;
 
   final image = imageLib.Image(width, height);
-
-  log('${image.exif.hasOrientation}');
 
   for (int w = 0; w < width; w++) {
     for (int h = 0; h < height; h++) {
