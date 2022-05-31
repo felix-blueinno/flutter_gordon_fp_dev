@@ -22,3 +22,46 @@ Find the model and labels in the assets folder.
 3. Follow <a href="https://pub.dev/packages/camera#installation">initial setup guideline</a> to prepare camera permission on Android/iOS.
 
 4. If encounter iOS build error: "Framework not found TensorFlowLiteC", check <a href="https://github.com/am15h/tflite_flutter_plugin/issues/163#issuecomment-984424456"> solution</a>:
+
+## Android build error emerged from Flutter 3.0:
+
+Error message:
+
+```
+e: /Users/felixwong/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/tflite_flutter_helper-0.3.1/android/src/main/kotlin/com/tfliteflutter/tflite_flutter_helper/TfliteFlutterHelperPlugin.kt: (43, 1): Class 'TfliteFlutterHelperPlugin' is not abstract and does not implement abstract member public abstract fun onRequestPermissionsResult(p0: Int, p1: Array<(out) String!>, p2: IntArray): Boolean defined in io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener
+e: /Users/felixwong/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/tflite_flutter_helper-0.3.1/android/src/main/kotlin/com/tfliteflutter/tflite_flutter_helper/TfliteFlutterHelperPlugin.kt: (143, 2): 'onRequestPermissionsResult' overrides nothing
+
+FAILURE: Build failed with an exception.
+
+- What went wrong:
+Execution failed for task ':tflite_flutter_helper:compileDebugKotlin'.
+
+> Compilation error. See log for more details
+```
+
+Solution:
+
+1.  Find the android file of `tflite_flutter_helper` package:
+
+    package_version: 0.3.1
+
+    `~/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/tflite_flutter_helper-0.3.1/android/src/main/kotlin/com/tfliteflutter/tflite_flutter_helper/TfliteFlutterHelperPlugin.kt`
+
+2.  Replace original `onRequestPermissionsResult` function with the following:
+
+```
+              override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
+              										grantResults: IntArray): Boolean {
+              	when (requestCode) {
+              		AUDIO_RECORD_PERMISSION_CODE -> {
+              			if (grantResults != null) {
+              				permissionToRecordAudio = grantResults.isNotEmpty() &&
+              						grantResults[0] == PackageManager.PERMISSION_GRANTED
+              			}
+              			completeInitializeRecorder()
+              			return true
+              		}
+              	}
+              	return false
+              }
+```
