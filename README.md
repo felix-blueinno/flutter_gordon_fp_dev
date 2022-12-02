@@ -27,7 +27,7 @@ Find the model and labels in the assets folder.
 
 Error message:
 
-```
+```bash
 e: /Users/felixwong/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/tflite_flutter_helper-0.3.1/android/src/main/kotlin/com/tfliteflutter/tflite_flutter_helper/TfliteFlutterHelperPlugin.kt: (43, 1): Class 'TfliteFlutterHelperPlugin' is not abstract and does not implement abstract member public abstract fun onRequestPermissionsResult(p0: Int, p1: Array<(out) String!>, p2: IntArray): Boolean defined in io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener
 e: /Users/felixwong/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/tflite_flutter_helper-0.3.1/android/src/main/kotlin/com/tfliteflutter/tflite_flutter_helper/TfliteFlutterHelperPlugin.kt: (143, 2): 'onRequestPermissionsResult' overrides nothing
 
@@ -49,7 +49,7 @@ Solution:
 
 2.  Replace original `onRequestPermissionsResult` function with the following:
 
-```
+```kotlin
               override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
               										grantResults: IntArray): Boolean {
               	when (requestCode) {
